@@ -1,0 +1,176 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Products</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/e59232f0a1.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<header xmlns:th="http://www.thymeleaf.org">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">WEB PROGRAMMING SHOP</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                    aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarsExampleDefault">
+                <ul class="navbar-nav m-auto">
+                    <li class="nav-item m-auto">
+                        <a class="nav-link active" href="/products">Products</a>
+                    </li>
+                    <li class="nav-item m-auto">
+                        <a class="nav-link active" href="/categories">Categories</a>
+                    </li>
+                    <li class="nav-item m-auto">
+                        <a class="nav-link active" href="/manufacturers">Manufacturers</a>
+                    </li>
+                </ul>
+
+
+                <form class="form-inline my-2 my-lg-0">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" aria-label="Small"
+                               aria-describedby="inputGroup-sizing-sm"
+                               placeholder="Search...">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary btn-number">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <ul class="nav navbar-nav navbar-right">
+
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="btn btn-light btn-sm ml-3" href="/logout">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+
+<div xmlns:th="http://www.thymeleaf.org">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Events</h1>
+            <h3 class="jumbotron-heading">All Events</h3>
+        </div>
+    </section>
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Event Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Popularity Score</th>
+                            <th scope="col">Location Name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="Events: ${events}" class="product">
+                        <tr th:each="Events: ${events}" class="product">
+                            <td th:text="${Events.getName()}"></td>
+                            <td th:text="${Events.getDescription()}"></td>
+                            <td th:text="${Events.getPopularityScore()}"></td>
+                            <td th:text="${Events.getLocation().getName()}"></td>
+                            <td class="text-right">
+                                <th:block>
+                                    <form th:action="@{'events/delete/{id}' (id=${Events.getId()})}"
+                                          th:method="DELETE">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-danger delete-product">
+                                            <i class="fa fa-trash">Delete</i>
+                                        </button>
+                                    </form>
+                                    <form th:if="${Events.isLiked()}" th:action="@{'events/like_event/{id}' (id=${Events.getId()})}"
+                                          th:method="LIKE">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-danger delete-product">
+                                            <i class="fa fa-trash">Like</i>
+                                        </button>
+                                    </form>
+                                </th:block>
+                                <th:block>
+                                    <a th:href="@{'events/events/edit-form/{id}' (id=${Events.getId()})}"
+                                       class="btn btn-sm btn-info edit-product">
+                                        <i class="fa fa-trash">Edit</i>
+                                    </a>
+                                </th:block>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col mb-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <a href="events/events/add-form" class="btn btn-block btn-dark add-product-btn">
+                            Add new Event
+                        </a>
+                        <br/>
+                        <br/>
+                        <form th:method="POST" th:action="@{events/event/submitBooking}">
+                            <h2>Choose number of tickets:</h2>
+                            <input type="number" name="numTickets" id="numTickets" min="1" max="10"><br/>
+                            <br/>
+                            <label for="event_name">Choose Event</label>
+                            <select name="event_name" id="event_name">
+                                <option th:each="Events: ${events}"
+                                        th:text="${Events.getName()}">
+                                </option>
+                            </select>
+                            <br/>
+                            <input type="submit" value="Submit" name="redirect">
+                        </form>
+                        <form th:method="GET" th:action="@{/events/search}">
+                            <label>Name:</label>
+                            <input type="text" name="searchText">
+                            <label>Rating:</label>
+                            <input type="number" name="searchDesc">
+                            <input type="submit" value="Search" name="search">
+                        </form>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Event Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Popularity Score</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="event : ${searchEvents}" class="product">
+                                <td th:text="${event.getName()}"></td>
+                                <td th:text="${event.getDescription()}"></td>
+                                <td th:text="${event.getPopularityScore()}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
